@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{% if object %}تعديل شريك{% else %}شريك جديد{% endif %}{% endblock %}
+{% block content %}
+<div class="page-header" data-aos="fade-down">
+    <h1 class="h3 mb-0">{% if object %}تعديل شريك{% else %}شريك جديد{% endif %}</h1>
+    <a class="btn btn-outline-secondary" href="/partners/">رجوع</a>
+    </div>
+
+<div class="card" data-aos="fade-up">
+    <div class="card-body">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-12 col-md-6"><label class="form-label">الاسم</label> {{ form.name }}</div>
+                <div class="col-12 col-md-6"><label class="form-label">المبلغ المنضم (IQD)</label> {{ form.joined_amount }}</div>
+                <div class="col-12 col-md-6"><label class="form-label">النسبة</label> {{ form.percentage }}</div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">{% if object %}تحديث{% else %}حفظ{% endif %}</button>
+                <a href="/partners/" class="btn btn-light">إلغاء</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+

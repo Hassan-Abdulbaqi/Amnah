@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{% if object %}تعديل طلب{% else %}طلب جديد{% endif %}{% endblock %}
+{% block content %}
+<div class="page-header" data-aos="fade-down">
+    <h1 class="h3 mb-0">{% if object %}تعديل طلب{% else %}طلب جديد{% endif %}</h1>
+    <a class="btn btn-outline-secondary" href="/orders/">رجوع</a>
+    </div>
+
+<div class="card" data-aos="fade-up">
+    <div class="card-body">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-12 col-md-6"><label class="form-label">الاسم</label> {{ form.name }}</div>
+                <div class="col-12 col-md-6"><label class="form-label">النوع</label> {{ form.order_type }}</div>
+                <div class="col-12 col-md-6"><label class="form-label">السعر (IQD)</label> {{ form.price }}</div>
+                <div class="col-12 col-md-6"><label class="form-label">التاريخ</label> {{ form.date }}</div>
+                <div class="col-12"><label class="form-label">الوصف</label> {{ form.description }}</div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">{% if object %}تحديث{% else %}حفظ{% endif %}</button>
+                <a href="/orders/" class="btn btn-light">إلغاء</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+

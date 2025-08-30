@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}حذف طلب{% endblock %}
+{% block content %}
+{% load currency %}
+<div class="page-header" data-aos="fade-down">
+    <h1 class="h3 mb-0">حذف طلب</h1>
+    <a class="btn btn-outline-secondary" href="/orders/">رجوع</a>
+    </div>
+
+<div class="card" data-aos="fade-up">
+    <div class="card-body">
+        <p>هل أنت متأكد من حذف <strong>{{ object.name }}</strong> بمبلغ <strong>{{ object.price|iqd }}</strong> بتاريخ <strong>{{ object.date }}</strong>؟</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">حذف</button>
+                <a href="/orders/" class="btn btn-light">إلغاء</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
