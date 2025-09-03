@@ -16,13 +16,14 @@
     </div>
     <div class="card-body">
         <form method="get" class="row g-3" novalidate>
-            <div class="col-12 col-md-4"><label class="form-label">بحث</label> {{ filter_form.search }}</div>
+            <div class="col-12 col-md-3"><label class="form-label">بحث</label> {{ filter_form.search }}</div>
+            <div class="col-12 col-md-3"><label class="form-label">بحث الزبون</label> {{ filter_form.customer_search }}</div>
             <div class="col-12 col-md-2"><label class="form-label">النوع</label> {{ filter_form.order_type }}</div>
             <div class="col-6 col-md-2"><label class="form-label">من تاريخ</label> {{ filter_form.date_from }}</div>
             <div class="col-6 col-md-2"><label class="form-label">إلى تاريخ</label> {{ filter_form.date_to }}</div>
             <div class="col-6 col-md-1"><label class="form-label">الحد الأدنى</label> {{ filter_form.price_min }}</div>
             <div class="col-6 col-md-1"><label class="form-label">الحد الأقصى</label> {{ filter_form.price_max }}</div>
-            <div class="col-6 col-md-3"><label class="form-label">ترتيب حسب</label> {{ filter_form.sort_by }}</div>
+            <div class="col-6 col-md-2"><label class="form-label">ترتيب حسب</label> {{ filter_form.sort_by }}</div>
             <div class="col-6 col-md-2"><label class="form-label">لكل صفحة</label> {{ filter_form.per_page }}</div>
             <div class="col-12 d-flex gap-2">
                 <button type="submit" class="btn btn-primary">تطبيق</button>
@@ -41,6 +42,7 @@
                         <tr>
                             <th>التاريخ</th>
                             <th>الاسم</th>
+                            <th>الزبون</th>
                             <th>النوع</th>
                             <th class="text-end">السعر</th>
                             <th class="text-end">إجراءات</th>
@@ -52,10 +54,22 @@
                             <td>{{ order.date }}</td>
                             <td>{{ order.name }}</td>
                             <td>
+                                {% if order.customer_name %}
+                                    <div>{{ order.customer_name }}</div>
+                                    {% if order.customer_address %}
+                                        <small class="text-muted">{{ order.customer_address|truncatechars:30 }}</small>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
                                 {% if order.order_type == 'IN' %}
                                     <span class="badge text-bg-success">{{ order.get_order_type_display }}</span>
-                                {% else %}
+                                {% elif order.order_type == 'OUT' %}
                                     <span class="badge text-bg-danger">{{ order.get_order_type_display }}</span>
+                                {% else %}
+                                    <span class="badge text-bg-secondary">غير محدد</span>
                                 {% endif %}
                             </td>
                             <td class="text-end">{{ order.price|iqd }}</td>
@@ -68,7 +82,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="5" class="text-center text-muted p-4">لا توجد طلبات بعد.</td>
+                            <td colspan="6" class="text-center text-muted p-4">لا توجد طلبات بعد.</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -86,11 +100,21 @@
                     <strong class="text-truncate" style="max-width: 65%">{{ order.name }}</strong>
                     {% if order.order_type == 'IN' %}
                         <span class="badge text-bg-success">{{ order.get_order_type_display }}</span>
-                    {% else %}
+                    {% elif order.order_type == 'OUT' %}
                         <span class="badge text-bg-danger">{{ order.get_order_type_display }}</span>
+                    {% else %}
+                        <span class="badge text-bg-secondary">غير محدد</span>
                     {% endif %}
                 </div>
                 <div class="small text-muted mb-2">{{ order.date }}</div>
+                {% if order.customer_name %}
+                    <div class="small mb-1">
+                        <strong>الزبون:</strong> {{ order.customer_name }}
+                        {% if order.customer_address %}
+                            <br><span class="text-muted">{{ order.customer_address|truncatechars:50 }}</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="fw-bold">{{ order.price|iqd }}</div>
                     <div class="btn-group" role="group">

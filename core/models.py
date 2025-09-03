@@ -22,10 +22,12 @@ class Order(models.Model):
     ]
 
     name = models.CharField(max_length=255)
-    order_type = models.CharField(max_length=3, choices=TYPE_CHOICES)
+    order_type = models.CharField(max_length=3, choices=TYPE_CHOICES, null=True, blank=True)
     price = models.BigIntegerField()
     date = models.DateField()
     description = models.TextField(blank=True)
+    customer_name = models.CharField(max_length=255, blank=True)
+    customer_address = models.TextField(blank=True)
 
     class Meta:
         ordering = ["-date", "name"]
@@ -36,8 +38,13 @@ class Order(models.Model):
 
     @property
     def signed_amount(self) -> float:
-        """Return price as positive for INGOING and negative for OUTGOING."""
-        return self.price if self.order_type == self.INGOING else -self.price
+        """Return price as positive for INGOING, negative for OUTGOING, and 0 for null/empty."""
+        if self.order_type == self.INGOING:
+            return self.price
+        elif self.order_type == self.OUTGOING:
+            return -self.price
+        else:
+            return 0
 
 
 class ActivityLog(models.Model):

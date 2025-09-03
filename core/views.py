@@ -52,6 +52,8 @@ def dashboard(request):
     num_orders = qs.count()
     num_ingoing = qs.filter(order_type=Order.INGOING).count()
     num_outgoing = qs.filter(order_type=Order.OUTGOING).count()
+    from django.db.models import Q
+    num_neutral = qs.filter(Q(order_type__isnull=True) | Q(order_type='')).count()
 
     partners = list(Partner.objects.all())
     partner_rows = []
@@ -70,6 +72,7 @@ def dashboard(request):
         "num_orders": num_orders,
         "num_ingoing": num_ingoing,
         "num_outgoing": num_outgoing,
+        "num_neutral": num_neutral,
         "partner_rows": partner_rows,
     }
     return render(request, "dashboard.html", context)
@@ -100,6 +103,8 @@ def dashboard_export(request):
     num_orders = qs.count()
     num_ingoing = qs.filter(order_type=Order.INGOING).count()
     num_outgoing = qs.filter(order_type=Order.OUTGOING).count()
+    from django.db.models import Q
+    num_neutral = qs.filter(Q(order_type__isnull=True) | Q(order_type='')).count()
 
     response = HttpResponse(content_type="text/csv; charset=utf-8")
     response["Content-Disposition"] = "attachment; filename=dashboard_stats.csv"
@@ -115,6 +120,7 @@ def dashboard_export(request):
     writer.writerow(["Orders Count", num_orders])
     writer.writerow(["Ingoing Count", num_ingoing])
     writer.writerow(["Outgoing Count", num_outgoing])
+    writer.writerow(["Neutral Count", num_neutral])
     writer.writerow([])
 
     # Partner shares
@@ -141,6 +147,7 @@ def orders_list(request):
 
     if form.is_valid():
         search = form.cleaned_data.get("search")
+        customer_search = form.cleaned_data.get("customer_search")
         order_type = form.cleaned_data.get("order_type")
         date_from = form.cleaned_data.get("date_from")
         date_to = form.cleaned_data.get("date_to")
@@ -151,6 +158,9 @@ def orders_list(request):
         if search:
             from django.db.models import Q
             qs = qs.filter(Q(name__icontains=search) | Q(description__icontains=search))
+        if customer_search:
+            from django.db.models import Q
+            qs = qs.filter(Q(customer_name__icontains=customer_search) | Q(customer_address__icontains=customer_search))
         if order_type:
             qs = qs.filter(order_type=order_type)
         if date_from:

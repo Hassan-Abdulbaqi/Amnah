@@ -51,7 +51,7 @@
     </div>
 
 <div class="row g-4 mb-4">
-    <div class="col-12 col-md-4" data-aos="fade-up">
+    <div class="col-12 col-md-3" data-aos="fade-up">
         <div class="card">
             <div class="card-body">
                 <div class="text-muted small">عدد العمليات</div>
@@ -59,7 +59,7 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="100">
+    <div class="col-12 col-md-3" data-aos="fade-up" data-aos-delay="100">
         <div class="card">
             <div class="card-body">
                 <div class="text-muted small">عدد الوارد</div>
@@ -67,11 +67,19 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="200">
+    <div class="col-12 col-md-3" data-aos="fade-up" data-aos-delay="200">
         <div class="card">
             <div class="card-body">
                 <div class="text-muted small">عدد الصادر</div>
                 <div class="h4 mb-0">{{ num_outgoing }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-3" data-aos="fade-up" data-aos-delay="300">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-muted small">غير محدد</div>
+                <div class="h4 mb-0">{{ num_neutral }}</div>
             </div>
         </div>
     </div>

@@ -3,15 +3,18 @@ from .models import Order, Partner
 
 
 class OrderForm(forms.ModelForm):
+    order_type = forms.ChoiceField(required=False, choices=[("", "اختر النوع")] + Order.TYPE_CHOICES, widget=forms.Select(attrs={"class": "form-select"}))
+    
     class Meta:
         model = Order
-        fields = ["name", "order_type", "price", "date", "description"]
+        fields = ["name", "order_type", "price", "date", "description", "customer_name", "customer_address"]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "اسم الطلب"}),
-            "order_type": forms.Select(attrs={"class": "form-select"}),
             "price": forms.NumberInput(attrs={"class": "form-control", "step": "1", "placeholder": "0"}),
             "date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 3, "placeholder": "وصف اختياري"}),
+            "customer_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "اسم الزبون"}),
+            "customer_address": forms.TextInput(attrs={"class": "form-control", "placeholder": "عنوان الزبون"}),
         }
 
 
@@ -38,6 +41,10 @@ class OrderFilterForm(forms.Form):
     search = forms.CharField(required=False, widget=forms.TextInput(attrs={
         "class": "form-control",
         "placeholder": "بحث بالاسم أو الوصف",
+    }))
+    customer_search = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        "class": "form-control",
+        "placeholder": "بحث باسم الزبون أو العنوان",
     }))
     order_type = forms.ChoiceField(required=False, choices=[("", "الكل")] + Order.TYPE_CHOICES, widget=forms.Select(attrs={
         "class": "form-select",
